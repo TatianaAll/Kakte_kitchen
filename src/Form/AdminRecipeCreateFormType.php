@@ -32,7 +32,11 @@ class AdminRecipeCreateFormType extends AbstractType
                 'attr' => ['class' =>'form-control'],
                 'label_attr' => ['class' => 'form-label']
             ])
-            ->add('image', TextType::class, options: [ 'label' => 'Image d\'illustration',
+            //je spécifie que pour l'ajout d'image j'ai un fileType
+            ->add('image', FileType::class, options: [
+                //je lui dit de ne pas prendre en compte dans le handle(request)
+                'mapped' => false,
+                'label' => 'Image d\'illustration',
                 'attr' => ['class' => 'form-control'],
                 'label_attr' => ['class' => 'form-label']
             ])
