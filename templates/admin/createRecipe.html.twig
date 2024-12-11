@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
-    <h2 class="h2 text-primary">Ajout d'une nouvelle recette</h2>
-<section class="container">
-    {{ form_start(formView) }}
-    {{ form_widget(formView) }}
-    {{ form_end(formView) }}
-</section>
+    <section class="container">
+        <h2 class="h2 text-primary mt-4 mb-4">Ajout d'une nouvelle recette</h2>
+        {{ form_start(formView) }}
+        {{ form_widget(formView) }}
+        {{ form_end(formView) }}
+    </section>
 {% endblock %}
