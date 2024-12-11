@@ -57,7 +57,7 @@ class AdminRecipeController extends AbstractController
             return $this->redirectToRoute('admin_list_recipes');
         }
 
-        return $this->render('admin/createRecipe.html.twig', ['formView' => $adminFormView]);
+        return $this->render('admin/recipes/createRecipe.html.twig', ['formView' => $adminFormView]);
     }
 
     #[Route(path: '/admin/list/recipes', name: 'admin_list_recipes', methods: ['GET'])]
@@ -65,21 +65,70 @@ class AdminRecipeController extends AbstractController
     {
         $recipes = $recipeRepository->findAll();
 
-        return $this->render('admin/listRecipes.html.twig', ['recipes' => $recipes]);
+        return $this->render('admin/recipes/listRecipes.html.twig', ['recipes' => $recipes]);
     }
 
-    #[Route(path:'/admin/delete/recipe/{id}', name: 'admin_delete_recipe', methods: ['GET'], requirements: ['id'=>'\d+'])]
+    #[Route(path:'/admin/delete/recipe/{id}', name: 'admin_delete_recipe', requirements: ['id'=>'\d+'], methods: ['GET'])]
     public function adminDeleteRecipe(int $id, RecipeRepository $recipeRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         //dd('test route');
-        $recipe = $recipeRepository->find($id);
+        $recipeToDelete = $recipeRepository->find($id);
+
+        //pour supprimer les images :
+        $imageToDelete = $recipeToDelete->getImage();
+        //dd($imageToDelete);
+
+        //@unlink($this->getParameter('public/assets/uploads').'/'.$imageToDelete);
         //dd($recipe);
-        $entityManager->remove($recipe);
+        $entityManager->remove($recipeToDelete);
         $entityManager->flush();
 
         $this->addFlash('success', 'Recette supprimée avec succès !');
 
         return $this->redirectToRoute('admin_list_recipes');
+    }
+
+    #[Route(path:'/admin/update/recipe/{id}', name: 'admin_update_recipe', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
+    public function adminUpdateRecipe(int $id,
+                                      RecipeRepository $recipeRepository,
+                                      Request $request,
+                                      EntityManagerInterface $entityManager,
+                                      ParameterBagInterface $parameterBag): Response
+    {
+        //dd('test route');
+
+        //je récup la recette a modif
+        $recipeToUpdate = $recipeRepository->find($id);
+
+        $adminRecipeForm = $this->createForm(AdminRecipeCreateFormType::class, $recipeToUpdate);
+        $formView = $adminRecipeForm->createView();
+
+        //je récupère les données
+        $adminRecipeForm->handleRequest($request);
+
+        if ($adminRecipeForm->isSubmitted()) {
+
+            $recipeImage = $adminRecipeForm->get('image')->getData();
+
+            if ($recipeImage) {
+                $imageNewName = uniqid() . '.' . $recipeImage->guessExtension();
+
+                $rootDir = $parameterBag->get('kernel.project_dir');
+                $uploadsDir = $rootDir . '/public/assets/uploads';
+                $recipeImage->move($uploadsDir, $imageNewName);
+
+                $recipeToUpdate->setImage($imageNewName);
+            }
+
+            $entityManager->persist($recipeToUpdate);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Recette modifiée');
+            $this->redirectToRoute('admin_list_recipes');
+        }
+
+        return $this->render('admin/recipes/updateRecipe.html.twig', ['formView' => $formView, 'recipe'=>$recipeToUpdate]);
+
     }
 
 }
