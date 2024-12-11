@@ -61,12 +61,25 @@ class AdminRecipeController extends AbstractController
     }
 
     #[Route(path: '/admin/list/recipes', name: 'admin_list_recipes', methods: ['GET'])]
-    public function listRecipes(RecipeRepository $recipeRepository): Response
+    public function adminListRecipes(RecipeRepository $recipeRepository): Response
     {
         $recipes = $recipeRepository->findAll();
 
         return $this->render('admin/listRecipes.html.twig', ['recipes' => $recipes]);
     }
 
+    #[Route(path:'/admin/delete/recipe/{id}', name: 'admin_delete_recipe', methods: ['GET'], requirements: ['id'=>'\d+'])]
+    public function adminDeleteRecipe(int $id, RecipeRepository $recipeRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        //dd('test route');
+        $recipe = $recipeRepository->find($id);
+        //dd($recipe);
+        $entityManager->remove($recipe);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Recette supprimée avec succès !');
+
+        return $this->redirectToRoute('admin_list_recipes');
+    }
 
 }
