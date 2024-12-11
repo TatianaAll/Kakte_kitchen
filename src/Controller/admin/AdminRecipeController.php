@@ -28,7 +28,9 @@ class AdminRecipeController extends AbstractController
         {
             $entityManager->persist($recipe);
             $entityManager->flush();
+            //message de succès
             $this->addFlash('success', 'Recette créée');
+
             return $this->redirectToRoute('admin_create_recipe');
         }
 

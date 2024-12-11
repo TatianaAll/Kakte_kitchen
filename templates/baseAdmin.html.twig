@@ -22,16 +22,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('admin_create_recipe') }}">Ajouter une recette</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link" href="{{ path('admin_create_category') }}">Ajouter une catégorie</a>
                     </li>
                 </ul>
             </div>
@@ -39,7 +33,7 @@
     </nav>
 </header>
 
-<main>
+<main class="container">
     {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{message}}
