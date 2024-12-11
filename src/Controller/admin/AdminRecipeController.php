@@ -3,6 +3,7 @@ namespace App\Controller\admin;
 
 use App\Entity\Recipe;
 use App\Form\AdminRecipeCreateFormType;
+use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +32,17 @@ class AdminRecipeController extends AbstractController
             //message de succès
             $this->addFlash('success', 'Recette créée');
 
-            return $this->redirectToRoute('admin_create_recipe');
+            return $this->redirectToRoute('admin_list_recipes');
         }
 
         return $this->render('admin/createRecipe.html.twig', ['formView' => $adminFormView]);
+    }
+
+    #[Route(path: '/admin/list/recipes', name: 'admin_list_recipes', methods: ['GET'])]
+    public function listRecipes(RecipeRepository $recipeRepository)
+    {
+        $recipes = $recipeRepository->findAll();
+
+        return $this->render('admin/listRecipes.html.twig', ['recipes' => $recipes]);
     }
 }
