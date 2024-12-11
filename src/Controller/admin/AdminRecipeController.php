@@ -39,10 +39,12 @@ class AdminRecipeController extends AbstractController
     }
 
     #[Route(path: '/admin/list/recipes', name: 'admin_list_recipes', methods: ['GET'])]
-    public function listRecipes(RecipeRepository $recipeRepository)
+    public function listRecipes(RecipeRepository $recipeRepository) : Response
     {
         $recipes = $recipeRepository->findAll();
 
         return $this->render('admin/listRecipes.html.twig', ['recipes' => $recipes]);
     }
+
+
 }
