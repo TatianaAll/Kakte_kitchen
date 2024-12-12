@@ -4,6 +4,7 @@ namespace App\Controller\public;
 
 use App\Repository\RecipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,7 +19,7 @@ class PublicRecipeController extends AbstractController
         return $this->render('public/recipes/list.html.twig', ['recipes'=>$recipesPublished]);
     }
 
-    #[Route(path:'recipe/{id}', name: 'public_recipe_show', methods: ['GET'])]
+    #[Route(path:'recipe/{id}', name: 'public_recipe_show', requirements: ['id'=>'\d+'], methods: ['GET'] )]
     public function showRecipe (int $id, RecipeRepository $recipeRepository) : Response
     {
         $recipe = $recipeRepository->find($id);
@@ -28,6 +29,14 @@ class PublicRecipeController extends AbstractController
             return $this->redirectToRoute('public_recipes_list');
         }
         return $this->render('public/recipes/show.html.twig', ['recipe'=>$recipe]);
+    }
+
+    #[Route(path:'/recipes/search', name: 'public_recipes_search', methods: ['GET'] )]
+    public function searchRecipes(Request $request) :Response
+    {
+        //dd('test');
+        $search = $request->query->get('search');
+        dd($search);
     }
 
 }
