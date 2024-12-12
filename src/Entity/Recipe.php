@@ -23,17 +23,18 @@ class Recipe
     #[Assert\Length(
         min: 5,
         max: 20,
-        minMessage: 'Titre d\'au moin 5 caractères',
-        maxMessage: 'Titre d\'au maximum 20 caractères'
+        minMessage: 'taille minimum nécessaire : 5 caractères',
+        maxMessage: 'taille maximale autorisée : 20 caractères'
     )]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     //je rajoute une contrainte notBlank
-    #[Assert\NotBlank]
+    #[Assert\NotBlank (message:'Ce champs ne peut pas être nul')]
     #[ORM\Column(length: 255)]
     private ?string $ingredients = null;
 
+    #[Assert\NotBlank (message:'Ce champs ne peut pas être nul')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $instructions = null;
 
@@ -49,7 +50,6 @@ class Recipe
 
     //je rajoute une contrainte notBlank
     #[ORM\Column]
-    #[Assert\NotBlank]
     private ?bool $isPublished = null;
 
     //à la construction d'une nouvelle instance je set 'createdAt'

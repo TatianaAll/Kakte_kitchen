@@ -55,7 +55,7 @@ class AdminRecipeCreateFormType extends AbstractType
                 'label_attr' => ['class' => 'form-check- mt-3']
             ])
             //j'aoute un bouton pour soumettre, c'est plus pratique en général
-            ->add('Enregistrer', SubmitType::class, options: [
+            ->add('enregistrer', SubmitType::class, options: [
                 'attr' => ['class' => 'btn btn-success mt-3'],
             ]);
     }
