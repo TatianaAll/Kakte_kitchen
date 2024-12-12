@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Résultat de la recherche "{{ search }}" {% endblock %}
+
+{% block body %}
+
+    <section class="container">
+        <h1 class="h1 text-primary">Recherche "{{ search }}"</h1>
+        <div class="d-flex justify-content-around">
+            {% for recipe in recipes %}
+                <div class="card" style="width: 20rem;">
+                    <img src="{{ asset('assets/uploads/' ~ recipe.image)}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.title }}</h5>
+                        <p class="card-text">Instructions : {{ recipe.instructions }}</p>
+                        <p class="card-text">Créée le : {{ recipe.createdAt | date('d-m-Y') }}</p>
+                        <a href="{{ path('public_recipe_show', {id: recipe.id}) }}" class="btn btn-primary mt-1">Voir la recette</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+    </section>
+
+
+{% endblock %}

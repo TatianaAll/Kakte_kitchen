@@ -16,28 +16,24 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    //    /**
-    //     * @return Recipe[] Returns an array of Recipe objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findBySearchInTitle(string $search) : array
+    {
+        //dd('test repository');
 
-    //    public function findOneBySomeField($value): ?Recipe
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // je créé mon query builder
+        $queryBuilder = $this->createQueryBuilder('recipes');
+        //je sélection tous ce qu'il y a dans recipes
+        $query = $queryBuilder->select('recipes')
+            //je donne mes conditions, ici c'est le titre de ma recette est A PEU PRES comme search
+            ->where('recipes.title LIKE :search')
+            //et search vaut : 'nb caractère indéfinis' + contenu du get + 'nb caractère indéfinis'
+            ->setParameter('search', '%'.$search.'%')
+            //j'envoi ma requete à mon ORM qui va la traduire en SQL (du vrai)
+            ->getQuery();
+
+        //dd($query);
+        return $query->getArrayResult();
+    }
+
+
 }
