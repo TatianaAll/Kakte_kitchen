@@ -27,7 +27,8 @@ class AdminRecipeController extends AbstractController
         //je récupère les données entrées dans les inputs coté client
         $adminRecipeCreateForm->handleRequest($request);
         //si c'est bien soumis alors je complète et j'envoie en DataBase
-        if ($adminRecipeCreateForm->isSubmitted()) {
+        // je vérifie que c'est bien valide
+        if ($adminRecipeCreateForm->isSubmitted() && $adminRecipeCreateForm->isValid()) {
             //ajout d'images
             //1- je les récupère depuis mon formulaire
             $imageImported = $adminRecipeCreateForm->get('image')->getData();

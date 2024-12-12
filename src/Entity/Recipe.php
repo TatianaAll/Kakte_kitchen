@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RecipeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 class Recipe
@@ -14,9 +15,22 @@ class Recipe
     #[ORM\Column]
     private ?int $id = null;
 
+    //on ajoute les contraintes liées à la validation du formulaire lié à cette entité
+    //il faudra que je précise ces contraintes au-dessus de la colonne visée (ici c'est sur le titre)
+    //la contrainte de notBlank qui oblige à mettre une info dans le champs
+    #[Assert\NotBlank]
+    //contrainte de longueur de champs avec les messages associés
+    #[Assert\Length(
+        min: 5,
+        max: 20,
+        minMessage: 'Titre d\'au moin 5 caractères',
+        maxMessage: 'Titre d\'au maximum 20 caractères'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    //je rajoute une contrainte notBlank
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $ingredients = null;
 
@@ -33,7 +47,9 @@ class Recipe
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
+    //je rajoute une contrainte notBlank
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?bool $isPublished = null;
 
     //à la construction d'une nouvelle instance je set 'createdAt'
