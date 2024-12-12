@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section class="container">
+        <h1 class="h1 text-primary">{{ recipe.title }}</h1>
+        <div class="d-flex justify-content-center">
+                <div class="card" style="width: 40rem;">
+                    <img src="{{ asset('assets/uploads/' ~ recipe.image)}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.title }}</h5>
+                        <p class="card-text">Instructions : {{ recipe.instructions }}</p>
+                        <p class="card-text">Créée le : {{ recipe.createdAt | date('d-m-Y') }}</p>
+                        <a href="#" class="btn btn-primary mt-1">Voir la recette</a>
+                        <a href="{{ path('admin_update_recipe', {id: recipe.id}) }}" class="btn btn-warning mt-1">Mettre à jour</a>
+                        <a href="{{ path('admin_delete_recipe', {id: recipe.id}) }}" class="btn btn-danger mt-1">Supprimer</a>
+                    </div>
+                </div>
+
+        </div>
+
+        <a href="{{ path('public_recipes_list') }}" class="btn btn-primary mt-2 mb-2">Retourner à la liste des recettes</a>
+
+    </section>
+
+
+{% endblock %}
