@@ -1,0 +1,29 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+
+    <section class="container">
+        <h1 class="h1 text-primary">Les utilisateurs</h1>
+
+        <div class="d-flex justify-content-around wrapped">
+            {% for user in users %}
+                <div class="card" style="width: 20rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ user.email }}</h5>
+                        <p class="card-text">ID n°{{ user.id }}</p>
+                        <p class="card-text">Roles : </p>
+                        <ul>
+                            {% for role in user.roles %}
+                            <li>{{ role }} </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </section>
+
+{% endblock %}
