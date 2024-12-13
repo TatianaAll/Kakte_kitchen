@@ -1,0 +1,12 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %} Modification {{ categoryToUpdate.title}} {% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h2 class="h2 text-primary mt-4 mb-4">Modification {{categoryToUpdate.title}}</h2>
+        {{ form_start(formView) }}
+        {{ form_widget(formView) }}
+        {{ form_end(formView) }}
+    </section>
+{% endblock %}
