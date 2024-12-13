@@ -34,6 +34,9 @@
                         <a class="nav-link" href="{{ path('admin_list_users') }}">Utilisateurs</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_update_user', {id:app.user.id}) }}">Connecté en tant que {{ app.user.email }}</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link danger" href="{{ path('admin_logout') }}">Déconnexion</a>
                     </li>
 
@@ -43,13 +46,18 @@
     </nav>
 </header>
 
-<main class="container mt-3">
+<section class="container mt-3">
     {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{message}}
         </div>
     {% endfor %}
-</main>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+</section>
 {% block body %}
 
 {% endblock %}

@@ -23,8 +23,9 @@ class AdminUserType extends AbstractType
                 'label_attr' => ['class' => 'form-label']])
 
             //ce serait cool d'avoir les rôles dans un select et une liste déroulante
-            ->add('roles', ChoiceType::class, options: [ 'mapped'=>false,
-                'choices' => ['ROLE_ADMIN' => 'ROLE_ADMIN', 'ROLE_USER' => 'ROLE_USER'],
+            ->add('roles', ChoiceType::class, options: [
+                'choices' => ['admin' => 'ROLE_ADMIN',
+                    'superAdmin' => 'ROLE_SUPER_ADMIN'],
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -32,7 +33,7 @@ class AdminUserType extends AbstractType
             //je ne récupère pas directement le password car il faut le passer à la moulinette avant,
             //donc ==> 'mapped' => false
             ->add('password', PasswordType::class, options: ['mapped'=>false,
-                'label' => 'Password',])
+                'label' => 'Password', 'required'=> false])
 
             //le bouton de soumission du form
             ->add('enregistrer', SubmitType::class, options: [
@@ -46,12 +47,3 @@ class AdminUserType extends AbstractType
         ]);
     }
 }
-
-
-//            ->add('roles', EntityType::class, options: [
-//                'class' => User::class,
-//                'choice_label' => 'roles',
-//                'label' => 'Roles',
-//                'attr' => ['class' => 'form-control'],
-//                'label_attr' => ['class' => 'form-label']
-//            ])
