@@ -1,0 +1,30 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %} Création recette {% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h2 class="h2 text-primary mt-4 mb-4">Création d'un utilisateur</h2>
+        {{ form_start(formView) }}
+        <div class="mb-3">
+            {{ form_label(formView.email) }}
+            {{ form_widget(formView.email) }}
+            {{ form_errors(formView.email) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(formView.roles) }}
+            {{ form_widget(formView.roles) }}
+            {{ form_errors(formView.roles) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(formView.password) }}
+            {{ form_widget(formView.password) }}
+            {{ form_errors(formView.password) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_widget(formView.enregistrer) }}
+        </div>
+        {{ form_end(formView) }}
+    </section>
+{% endblock %}
