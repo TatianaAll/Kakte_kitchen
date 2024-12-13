@@ -14,9 +14,11 @@
                         <h5 class="card-title text-primary">{{ user.email }}</h5>
                         <p class="card-text">ID n°{{ user.id }}</p>
                         <p class="card-text">Roles : </p>
+                        <a href="{{ path('admin_delete_user', {id: user.id}) }}"
+                           class="btn btn-danger mt-1">Supprimer</a>
                         <ul>
                             {% for role in user.roles %}
-                            <li>{{ role }} </li>
+                                <li>{{ role }} </li>
                             {% endfor %}
                         </ul>
                     </div>

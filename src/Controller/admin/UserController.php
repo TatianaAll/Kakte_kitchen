@@ -76,5 +76,18 @@ class UserController extends AbstractController
 
     }
 
+    #[Route(path:'admin/users/delete/{id}', name:'admin_delete_user', requirements: ['id'=>'\d+'] ,methods: ['GET'])]
+    public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager) : Response
+    {
+        $userToDelete = $userRepository->find($id);
+
+        $entityManager->remove($userToDelete);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur supprimé');
+
+        return $this->redirectToRoute('admin_list_users');
+    }
+
 
 }
