@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.title }} {% endblock %}
+
+{% block body %}
+
+    <section class="container">
+        <h1 class="h1 text-primary">{{ category.title }}</h1>
+        <div class="d-flex justify-content-center flex-wrap">
+            <div class="card" style="width: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.title }}</h5>
+                    <p class="card-text">Recettes liées à cette catégorie: </p>
+                    <ul>
+                    {% for recipe in category.recipes %}
+                        {% if recipe.isPublished %}
+                        <li><a href="{{ path('public_recipe_show', {id: recipe.id}) }}">{{ recipe.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="{{ path('public_categories_list') }}" class="btn btn-primary mt-2 mb-2">Retourner à la liste des catégories</a>
+
+    </section>
+
+
+{% endblock %}
