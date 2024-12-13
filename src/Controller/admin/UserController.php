@@ -89,5 +89,28 @@ class UserController extends AbstractController
         return $this->redirectToRoute('admin_list_users');
     }
 
+    #[Route(path:'admin/users/update/{id}', name:'admin_update_user', requirements: ['id'=>'\d+'] ,methods: ['GET', 'POST'])]
+    public function updateUser(int $id, UserRepository $userRepository,
+                               EntityManagerInterface $entityManager, Request $request) : Response
+    {
+        $userToUpdate = $userRepository->find($id);
+
+        $form = $this->createForm(AdminUserType::class, $userToUpdate);
+        $formView = $form->createView();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist($userToUpdate);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Utilisateur modifié');
+
+            return $this->redirectToRoute('admin_list_users');
+        }
+
+        return $this->render('admin/users/updateUsers.html.twig', ['formView'=>$formView, 'userToUpdate'=>$userToUpdate]);
+    }
+
 
 }

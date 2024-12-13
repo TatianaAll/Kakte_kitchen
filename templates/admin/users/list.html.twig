@@ -14,17 +14,21 @@
                         <h5 class="card-title text-primary">{{ user.email }}</h5>
                         <p class="card-text">ID n°{{ user.id }}</p>
                         <p class="card-text">Roles : </p>
-                        <a href="{{ path('admin_delete_user', {id: user.id}) }}"
-                           class="btn btn-danger mt-1">Supprimer</a>
                         <ul>
                             {% for role in user.roles %}
                                 <li>{{ role }} </li>
                             {% endfor %}
                         </ul>
+                        <a href="{{ path('admin_update_user', {id: user.id}) }}"
+                           class="btn btn-warning mt-1">Mettre à jour</a>
+                        <a href="{{ path('admin_delete_user', {id: user.id}) }}"
+                           class="btn btn-danger mt-1">Supprimer</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
+
+        <a href="{{ path('admin_create_user') }}" class="btn btn-primary mt-2 mb-2">Ajouter un utilisateur</a>
 
     </section>
 
