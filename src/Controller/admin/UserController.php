@@ -53,12 +53,18 @@ class UserController extends AbstractController
             //il faut que je récupère le mdp rentré et que je le hache
             //dd($form->get('password')->getData());
             $plaintextPassword = $form->get('password')->getData();
+            //je hache le tout
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plaintextPassword
             );
             $user->setPassword($hashedPassword);
             //dd($hashedPassword);
+
+            $roles = $form->get('roles')->getData();
+            //dd($roles);
+            $user->setRoles($roles);
+
 
             $entityManager->persist($user);
             $entityManager->flush();

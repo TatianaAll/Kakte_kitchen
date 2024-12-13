@@ -23,7 +23,10 @@ class AdminUserType extends AbstractType
                 'label_attr' => ['class' => 'form-label']])
 
             //ce serait cool d'avoir les rôles dans un select et une liste déroulante
-            ->add('roles', ChoiceType::class, options: [ 'mapped'=>false
+            ->add('roles', ChoiceType::class, options: [ 'mapped'=>false,
+                'choices' => ['ROLE_ADMIN' => 'ROLE_ADMIN', 'ROLE_USER' => 'ROLE_USER'],
+                'expanded' => true,
+                'multiple' => true,
             ])
 
             //je ne récupère pas directement le password car il faut le passer à la moulinette avant,
