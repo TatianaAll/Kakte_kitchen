@@ -73,7 +73,7 @@ class AdminRecipeController extends AbstractController
     }
 
     #[Route(path:'/admin/delete/recipe/{id}', name: 'admin_delete_recipe', requirements: ['id'=>'\d+'], methods: ['GET'])]
-    public function adminDeleteRecipe(int $id, RecipeRepository $recipeRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function adminDeleteRecipe(int $id, RecipeRepository $recipeRepository, ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager): Response
     {
         //dd('test route');
         $recipeToDelete = $recipeRepository->find($id);
@@ -81,8 +81,12 @@ class AdminRecipeController extends AbstractController
         //pour supprimer les images :
         $imageToDelete = $recipeToDelete->getImage();
         //dd($imageToDelete);
+        $rootDir = $parameterBag->get('kernel.project_dir');
+        //dd($rootDir);
+        // je génère le chemin vers le dossier uploads (dans le dossier public)
+        $uploadsDir = $rootDir . '/public/assets/uploads';
 
-        //@unlink($this->getParameter('public/assets/uploads').'/'.$imageToDelete);
+        @unlink($uploadsDir.'/'. $imageToDelete);
         //dd($recipe);
         $entityManager->remove($recipeToDelete);
         $entityManager->flush();
@@ -100,8 +104,6 @@ class AdminRecipeController extends AbstractController
                                       ParameterBagInterface $parameterBag,
                                       UniqueFileNameGenerator $uniqueFileNameGenerator): Response
     {
-        //dd('test route');
-
         //je récup la recette a modif
         $recipeToUpdate = $recipeRepository->find($id);
 
@@ -114,10 +116,12 @@ class AdminRecipeController extends AbstractController
         if ($adminRecipeForm->isSubmitted()) {
 
             $recipeImage = $adminRecipeForm->get('image')->getData();
-            $nameImage = $recipeImage->getClientOriginalName();
-            $imageExtension = $recipeImage->getClientOriginalExtension();
 
             if ($recipeImage) {
+                //je récupère le nom et l'extension de mon image (en string)
+                $nameImage = $recipeImage->getClientOriginalName();
+                $imageExtension = $recipeImage->getClientOriginalExtension();
+
                 $imageNewName = $uniqueFileNameGenerator->generateUniqueFileName($nameImage, $imageExtension);
 
                 $rootDir = $parameterBag->get('kernel.project_dir');
@@ -131,6 +135,7 @@ class AdminRecipeController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Recette modifiée');
+
             $this->redirectToRoute('admin_list_recipes');
         }
 

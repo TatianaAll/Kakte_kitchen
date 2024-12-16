@@ -9,7 +9,7 @@ class UniqueFileNameGenerator
         $currentTimestamp = time();
         $nameHashed = hash('sha256', $imageName);
 
-        $imageNewName = uniqid() . '-' . $nameHashed . '-' . $currentTimestamp . '.' . $imageExtension;
+        $imageNewName = $imageName . '-' . uniqid() . '-' . $nameHashed . '-' . $currentTimestamp . '.' . $imageExtension;
 
         return $imageNewName;
     }
