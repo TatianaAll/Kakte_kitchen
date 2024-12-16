@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Recipe;
 use App\Form\AdminRecipeCreateFormType;
 use App\Repository\RecipeRepository;
+use App\Service\UniqueFileNameGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminRecipeController extends AbstractController
 {
     #[Route(path: '/admin/create/recipe', name: 'admin_create_recipe', methods: ['POST', 'GET'])]
-    public function adminCreateRecipe(Request $request, EntityManagerInterface $entityManager, ParameterBagInterface $parameterBag): Response
+    public function adminCreateRecipe(UniqueFileNameGenerator $uniqueFileNameGenerator, Request $request, EntityManagerInterface $entityManager, ParameterBagInterface $parameterBag): Response
     {
         //dd('test route');
         //1- je crée une nouvelle entité que je vais venir complétée
@@ -34,9 +35,11 @@ class AdminRecipeController extends AbstractController
             $imageImported = $adminRecipeCreateForm->get('image')->getData();
 
             if ($imageImported) {
+                $nameImage = $imageImported->getClientOriginalName();
+                $imageExtension = $imageImported->getClientOriginalExtension();
                 //2- je renomme mon image
-                $newImageName = uniqid() . '.' . $imageImported->guessExtension();
-
+                $newImageName = $uniqueFileNameGenerator->generateUniqueFileName($nameImage, $imageExtension);
+                //dd($newImageName);
                 // je récupère grâce à la classe ParameterBag, le chemin vers la racine du projet
                 $rootDir = $parameterBag->get('kernel.project_dir');
                 //dd($rootDir);
@@ -94,7 +97,8 @@ class AdminRecipeController extends AbstractController
                                       RecipeRepository $recipeRepository,
                                       Request $request,
                                       EntityManagerInterface $entityManager,
-                                      ParameterBagInterface $parameterBag): Response
+                                      ParameterBagInterface $parameterBag,
+                                      UniqueFileNameGenerator $uniqueFileNameGenerator): Response
     {
         //dd('test route');
 
@@ -110,9 +114,11 @@ class AdminRecipeController extends AbstractController
         if ($adminRecipeForm->isSubmitted()) {
 
             $recipeImage = $adminRecipeForm->get('image')->getData();
+            $nameImage = $recipeImage->getClientOriginalName();
+            $imageExtension = $recipeImage->getClientOriginalExtension();
 
             if ($recipeImage) {
-                $imageNewName = uniqid() . '.' . $recipeImage->guessExtension();
+                $imageNewName = $uniqueFileNameGenerator->generateUniqueFileName($nameImage, $imageExtension);
 
                 $rootDir = $parameterBag->get('kernel.project_dir');
                 $uploadsDir = $rootDir . '/public/assets/uploads';
